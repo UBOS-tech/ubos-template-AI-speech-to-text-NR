@@ -1,0 +1,171 @@
+[
+    {
+        "id": "e2692c27b7db433b",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ef873a65353d6211",
+        "type": "function",
+        "z": "e2692c27b7db433b",
+        "name": "req to openAI",
+        "func": "// msg.token = `Bearer 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`\nmsg.oldpayload = msg.payload;\nmsg.url = `https://api.openai.com/v1/audio/transcriptions`;\nmsg.method = \"POST\";\n\nmsg.headers = {\n    \"Content-Type\": \"multipart/form-data\",\n    \"Authorization\": \"Bearer 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\",\n    \"Connection\": \"Keep-Alive\",\n    \"Transfer-Encoding\": \"chunked\"\n}\n\nmsg.payload = {\n    // file: msg.req.files[0].buffer,\n    model: 'whisper-1',\n    // \"language\": \"uk\",\n    'temperature': 0.2,\n        \"file\": {\n        \"value\": msg.req.files[0].buffer,\n        \"options\": {\n            \"filename\": msg.req.files[0].originalname\n        }\n    },\n    \n}\n\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 160,
+        "wires": [
+            [
+                "cd294fe514531bf4"
+            ]
+        ]
+    },
+    {
+        "id": "76fc1a4f3f884ce9",
+        "type": "http in",
+        "z": "e2692c27b7db433b",
+        "name": "",
+        "url": "/uploadVideo",
+        "method": "post",
+        "upload": true,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 160,
+        "wires": [
+            [
+                "ef873a65353d6211"
+            ]
+        ]
+    },
+    {
+        "id": "cd294fe514531bf4",
+        "type": "http request",
+        "z": "e2692c27b7db433b",
+        "name": "",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 510,
+        "y": 160,
+        "wires": [
+            [
+                "a37b626105e17430"
+            ]
+        ]
+    },
+    {
+        "id": "eefdeea1b127e4b8",
+        "type": "http response",
+        "z": "e2692c27b7db433b",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 850,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "b61e8c652f956d7f",
+        "type": "function",
+        "z": "e2692c27b7db433b",
+        "name": "req to openAI",
+        "func": "msg.oldpayload = msg.payload;\nmsg.url = `https://api.openai.com/v1/completions`;\nmsg.method = \"POST\";\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Bearer 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\",\n}\n\nmsg.prompt = msg.payload.prompt + \" Data: \" + msg.payload.data\n\nmsg.payload = {\n    \"model\": \"text-davinci-003\",\n    'temperature': 0.5,\n    \"prompt\": msg.prompt,\n    \"max_tokens\":2000,\n    \"top_p\": 1,\n    \"n\": 1\n}\n\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 240,
+        "wires": [
+            [
+                "18503a1e7b8d4bf3"
+            ]
+        ]
+    },
+    {
+        "id": "30372f6c01902ac4",
+        "type": "http in",
+        "z": "e2692c27b7db433b",
+        "name": "",
+        "url": "/completions",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 240,
+        "wires": [
+            [
+                "b61e8c652f956d7f"
+            ]
+        ]
+    },
+    {
+        "id": "18503a1e7b8d4bf3",
+        "type": "http request",
+        "z": "e2692c27b7db433b",
+        "name": "",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 510,
+        "y": 240,
+        "wires": [
+            [
+                "2bb98d6906a94c7a"
+            ]
+        ]
+    },
+    {
+        "id": "2bb98d6906a94c7a",
+        "type": "http response",
+        "z": "e2692c27b7db433b",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 670,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "a37b626105e17430",
+        "type": "function",
+        "z": "e2692c27b7db433b",
+        "name": "check status",
+        "func": "if(msg.statusCode === 200){\n    msg.payload = msg.payload.text\n    }\n    else{\n        msg.payload = msg.payload\n        msg.statusCode = 200\n    }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 160,
+        "wires": [
+            [
+                "eefdeea1b127e4b8"
+            ]
+        ]
+    }
+]
