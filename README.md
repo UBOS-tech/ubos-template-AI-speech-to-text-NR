@@ -2,7 +2,7 @@ Speech to text
 ==============
 <img width="100%"  alt="Ubos - End-to-End Software Development Platform" src="https://ubos.tech/wp-content/uploads/2023/03/cropped-Group-21015-1.png">
 <h3 align="center">
-  <b><a href="https://docs.ubos.tech/books/getting-started" target=”_blank”>Get Started</a></b>
+  <b><a href="https://docs.ubos.tech/books/getting-started">Get Started</a></b>
   •
   <a href="https://community.ubos.tech/">Community</a>
   •
@@ -18,7 +18,7 @@ This repository provides a powerful tool for converting audio files to text usin
 
 But that's just the beginning! The tool also provides advanced features for analyzing transcribed text, including summarization and the ability to create plans. This means that users can not only transcribe audio, but also gain deeper insights from the resulting text, making it a valuable resource for a wide range of use cases.
 
-Check this video demo of the tool in action: <a href="https://www.youtube.com/watch?v=GQJ3fz0e9p0&ab_channel=UBOS%3ANo-codeplatformforAIapps">link to YouTube video</a></b>
+Check this video demo of the tool in action: <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=GQJ3fz0e9p0&ab_channel=UBOS%3ANo-codeplatformforAIapps">link to YouTube video</a></b>
 
 ### Features
 - Audio transcription using OpenAI's API
