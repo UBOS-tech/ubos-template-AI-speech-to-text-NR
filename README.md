@@ -12,9 +12,13 @@ Speech to text
   •
   <a href="https://github.com/UBOS-tech">GitHub</a>
   </h3>
+
+
 This repository provides a powerful tool for converting audio files to text using advanced AI technology. Using OpenAI's API, this tool allows users to quickly and easily transcribe audio recordings, saving time and effort compared to traditional transcription methods.
 
 But that's just the beginning! The tool also provides advanced features for analyzing transcribed text, including summarization and the ability to create plans. This means that users can not only transcribe audio, but also gain deeper insights from the resulting text, making it a valuable resource for a wide range of use cases.
+
+Check this video demo of the tool in action: <a href="https://www.youtube.com/watch?v=GQJ3fz0e9p0&ab_channel=UBOS%3ANo-codeplatformforAIapps">link to YouTube video</a></b>
 
 ### Features
 - Audio transcription using OpenAI's API
