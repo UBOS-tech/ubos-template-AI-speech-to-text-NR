@@ -12,7 +12,7 @@
         "type": "function",
         "z": "e2692c27b7db433b",
         "name": "req to openAI",
-        "func": "msg.oldpayload = msg.payload;\nmsg.url = `https://api.openai.com/v1/audio/transcriptions`;\nmsg.method = \"POST\";\n\nmsg.headers = {\n    \"Content-Type\": \"multipart/form-data\",\n    \"Authorization\": \"Bearer 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\",\n    \"Connection\": \"Keep-Alive\",\n    \"Transfer-Encoding\": \"chunked\"\n}\n\nmsg.payload = {\n    // file: msg.req.files[0].buffer,\n    model: 'whisper-1',\n    // \"language\": \"uk\",\n    'temperature': 0.2,\n        \"file\": {\n        \"value\": msg.req.files[0].buffer,\n        \"options\": {\n            \"filename\": msg.req.files[0].originalname\n        }\n    },\n    \n}\n\nreturn msg;\n\n",
+        "func": "msg.oldpayload = msg.payload;\nmsg.url = `https://api.openai.com/v1/audio/transcriptions`;\nmsg.method = \"POST\";\nmsg.token = global.get('token')\nmsg.headers = {\n    \"Content-Type\": \"multipart/form-data\",\n    \"Authorization\": msg.token,\n    \"Connection\": \"Keep-Alive\",\n    \"Transfer-Encoding\": \"chunked\"\n}\n\nmsg.payload = {\n    // file: msg.req.files[0].buffer,\n    model: 'whisper-1',\n    // \"language\": \"uk\",\n    'temperature': 0.2,\n        \"file\": {\n        \"value\": msg.req.files[0].buffer,\n        \"options\": {\n            \"filename\": msg.req.files[0].originalname\n        }\n    },\n    \n}\n\nreturn msg;\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -83,7 +83,7 @@
         "type": "function",
         "z": "e2692c27b7db433b",
         "name": "req to openAI",
-        "func": "msg.oldpayload = msg.payload;\nmsg.url = `https://api.openai.com/v1/completions`;\nmsg.method = \"POST\";\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Bearer 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\",\n}\n\nmsg.prompt = msg.payload.prompt + \" Data: \" + msg.payload.data\n\nmsg.payload = {\n    \"model\": \"text-davinci-003\",\n    'temperature': 0.5,\n    \"prompt\": msg.prompt,\n    \"max_tokens\":2000,\n    \"top_p\": 1,\n    \"n\": 1\n}\n\nreturn msg;\n\n",
+        "func": "msg.oldpayload = msg.payload;\nmsg.url = `https://api.openai.com/v1/completions`;\nmsg.method = \"POST\";\nmsg.token = global.get('token')\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": msg.token\n}\n\nmsg.prompt = msg.payload.prompt + \" Data: \" + msg.payload.data\n\nmsg.payload = {\n    \"model\": \"text-davinci-003\",\n    'temperature': 0.5,\n    \"prompt\": msg.prompt,\n    \"max_tokens\":2000,\n    \"top_p\": 1,\n    \"n\": 1\n}\n\nreturn msg;\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -166,6 +166,52 @@
             [
                 "eefdeea1b127e4b8"
             ]
+        ]
+    },
+    {
+        "id": "49ece5a57540c69b",
+        "type": "inject",
+        "z": "e2692c27b7db433b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 80,
+        "wires": [
+            [
+                "6653f1a7a2a81d18"
+            ]
+        ]
+    },
+    {
+        "id": "6653f1a7a2a81d18",
+        "type": "function",
+        "z": "e2692c27b7db433b",
+        "name": "function 1",
+        "func": "global.set('token', '')\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 80,
+        "wires": [
+            []
         ]
     }
 ]
