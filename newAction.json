@@ -214,16 +214,15 @@
             "isValid": true,
             "invalids": [],
             "jsonPathKeys": [
-                "ma in.env.nr",
+                "main.env.nr",
                 "promtCopy.text",
-                "Custom1.message",
-                "main.env.nr"
+                "Custom1.message"
             ],
             "userSetOnLoad": false,
             "confirmBeforeExecute": false
         },
         "createdAt": "2023-04-26T08:24:25.906Z",
-        "updatedAt": "2023-05-15T13:15:10.937Z",
+        "updatedAt": "2023-05-15T13:41:17.443Z",
         "deleted": false,
         "policies": [
             {
