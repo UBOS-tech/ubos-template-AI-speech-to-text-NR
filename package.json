@@ -3,7 +3,8 @@
     "description": "A Node-RED Project",
     "version": "0.0.1",
     "dependencies": {
-        "node-red-contrib-ytdl": "0.0.6"
+        "node-red-contrib-ytdl": "0.0.6",
+        "node-red-contrib-ytdl-ubos": "0.0.1"
     },
     "node-red": {
         "settings": {
