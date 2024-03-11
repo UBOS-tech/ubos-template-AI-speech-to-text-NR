@@ -1,52 +1,16 @@
 [
     {
-        "id": "0982ff679a3f7ceb",
+        "id": "1bf0d6b2752b2635",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "speech-to-text2",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "d0f0fa31e9af4d8f",
-        "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 1",
-        "func": "msg.oldpayload = msg.payload;\nmsg.url = `https://api.openai.com/v1/audio/transcriptions`;\nmsg.method = \"POST\";\nmsg.token = global.get('token')\nmsg.headers = {\n    \"Content-Type\": \"multipart/form-data\",\n    \"Authorization\": msg.token,\n    \"Connection\": \"Keep-Alive\",\n    \"Transfer-Encoding\": \"chunked\"\n}\nmsg.buffer = msg.req.files[0].buffer\nmsg.filename = msg.req.files[0].originalname\nmsg.payload = {\n    // file: msg.req.files[0].buffer,\n    model: 'whisper-1',\n    \"language\": msg.payload.lan,\n    'temperature': 0.2,\n        \"file\": {\n        \"value\": msg.req.files[0].buffer,\n        \"options\": {\n            \"filename\": msg.req.files[0].originalname\n        }\n    },\n    \n}\n\nreturn msg;\n\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 320,
-        "y": 220,
-        "wires": [
-            [
-                "9b3a7ea6d7b465b5"
-            ]
-        ]
-    },
-    {
-        "id": "e147fe4763407457",
-        "type": "http in",
-        "z": "0982ff679a3f7ceb",
-        "name": "",
-        "url": "/uploadVideo",
-        "method": "post",
-        "upload": true,
-        "swaggerDoc": "",
-        "x": 130,
-        "y": 220,
-        "wires": [
-            [
-                "d0f0fa31e9af4d8f"
-            ]
-        ]
-    },
-    {
-        "id": "9b3a7ea6d7b465b5",
+        "id": "5d5bc619fee825b0",
         "type": "http request",
-        "z": "0982ff679a3f7ceb",
+        "z": "1bf0d6b2752b2635",
         "name": "",
         "method": "use",
         "ret": "obj",
@@ -59,37 +23,40 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 490,
+        "x": 510,
         "y": 220,
         "wires": [
             [
-                "dbb0bfc934a59ccb"
+                "1baf6c3cbd23b52e"
             ]
         ]
     },
     {
-        "id": "a54708c36aa14863",
+        "id": "ede1e6ca4e1a9683",
         "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 14",
-        "func": "msg.old = msg.payload\nmsg.payload = msg.payload.url\nmsg.path = \"/data/video/\"\nmsg.audioonly = \"true\"\n\nreturn msg;",
-        "outputs": 1,
+        "z": "1bf0d6b2752b2635",
+        "name": "check type",
+        "func": "global.set('key', msg.payload.key)\n\nif(msg.payload.type === 'url'){\nmsg.old = msg.payload\nmsg.payload = msg.payload.url\nmsg.path = \"/video/\"\nmsg.audioonly = \"true\"\n\n    return [msg,null]\n}else {\n    msg.oldpayload = msg.payload;\n    msg.url = `https://api.openai.com/v1/audio/transcriptions`;\n    msg.method = \"POST\";\n    msg.token = msg.oldpayload.key\n    \n    msg.headers = {\n        \"Content-Type\": \"multipart/form-data\",\n        \"Authorization\": `Bearer ${msg.token}`,\n        \"Connection\": \"Keep-Alive\",\n        \"Transfer-Encoding\": \"chunked\"\n    }\n    msg.buffer = msg.req.files[0].buffer\n    msg.filename = msg.req.files[0].originalname\n    msg.payload = {\n\n        model: 'whisper-1',\n        \"language\": msg.payload.lan,\n        'temperature': 0.2,\n        \"file\": {\n            \"value\": msg.req.files[0].buffer,\n            \"options\": {\n                \"filename\": msg.req.files[0].originalname\n            }\n        },\n\n    }\n    return [null,msg]\n}\n",
+        "outputs": 2,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 310,
-        "y": 120,
+        "y": 180,
         "wires": [
             [
-                "ccdf5fd4ed9e6ed3"
+                "a66789c0abb53019"
+            ],
+            [
+                "5d5bc619fee825b0"
             ]
         ]
     },
     {
-        "id": "98aad56239f8cbee",
+        "id": "79e206c1a489a88a",
         "type": "file in",
-        "z": "0982ff679a3f7ceb",
+        "z": "1bf0d6b2752b2635",
         "name": "",
         "filename": "filename",
         "filenameType": "msg",
@@ -98,37 +65,37 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 880,
-        "y": 120,
+        "x": 900,
+        "y": 140,
         "wires": [
             [
-                "c8f4abdd67ce6538"
+                "1c248afb52887b38"
             ]
         ]
     },
     {
-        "id": "c8f4abdd67ce6538",
+        "id": "1c248afb52887b38",
         "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 15",
-        "func": "msg.oldpayload = msg.payload;\nmsg.url = `https://api.openai.com/v1/audio/transcriptions`;\nmsg.method = \"POST\";\nmsg.token = global.get('token')\nmsg.headers = {\n    \"Content-Type\": \"multipart/form-data\",\n    \"Authorization\": msg.token,\n    \"Connection\": \"Keep-Alive\",\n    \"Transfer-Encoding\": \"chunked\"\n}\nmsg.buffer = msg.payload\nmsg.payload = {\n    model: 'whisper-1',\n    \"response-format\": \"text\",\n    'temperature': 0.2,\n    \"language\": msg.payload.lan,\n        \"file\": {\n        \"value\": msg.payload,\n        \"options\": {\n            \"filename\": msg.filename\n        }\n    },\n    \n}\n\nreturn msg;\n\n",
+        "z": "1bf0d6b2752b2635",
+        "name": "Open AI Request",
+        "func": "msg.oldpayload = msg.payload;\nmsg.url = `https://api.openai.com/v1/audio/transcriptions`;\nmsg.method = \"POST\";\nmsg.token = msg.old.key\nmsg.headers = {\n    \"Content-Type\": \"multipart/form-data\",\n    \"Authorization\": `Bearer ${msg.token}`,\n    \"Connection\": \"Keep-Alive\",\n    \"Transfer-Encoding\": \"chunked\"\n}\nmsg.buffer = msg.payload\nmsg.payload = {\n    model: 'whisper-1',\n    \"response-format\": \"text\",\n    'temperature': 0.2,\n    \"language\": msg.payload.lan,\n        \"file\": {\n        \"value\": msg.payload,\n        \"options\": {\n            \"filename\": msg.filename\n        }\n    },\n    \n}\n\nreturn msg;\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1050,
-        "y": 120,
+        "x": 1070,
+        "y": 140,
         "wires": [
             [
-                "1e636f447ae5e7fb"
+                "f8014b7ee1385d2b"
             ]
         ]
     },
     {
-        "id": "1e636f447ae5e7fb",
+        "id": "f8014b7ee1385d2b",
         "type": "http request",
-        "z": "0982ff679a3f7ceb",
+        "z": "1bf0d6b2752b2635",
         "name": "",
         "method": "use",
         "ret": "obj",
@@ -141,191 +108,103 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1230,
-        "y": 120,
+        "x": 1250,
+        "y": 140,
         "wires": [
             [
-                "62b17cec65e9d571"
+                "470e85dae371e0df"
             ]
         ]
     },
     {
-        "id": "7bcb301e0aa4eb8e",
+        "id": "5834e2714ff34a91",
         "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 16",
+        "z": "1bf0d6b2752b2635",
+        "name": "setup filename",
         "func": "msg.filename = msg.file\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 710,
-        "y": 120,
+        "x": 740,
+        "y": 140,
         "wires": [
             [
-                "98aad56239f8cbee"
+                "79e206c1a489a88a"
             ]
         ]
     },
     {
-        "id": "c565c5f228732452",
+        "id": "6cb57d026254cae2",
         "type": "http in",
-        "z": "0982ff679a3f7ceb",
+        "z": "1bf0d6b2752b2635",
         "name": "",
-        "url": "/urlVideo",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 120,
-        "y": 120,
-        "wires": [
-            [
-                "a54708c36aa14863"
-            ]
-        ]
-    },
-    {
-        "id": "e3314196fa80a884",
-        "type": "http response",
-        "z": "0982ff679a3f7ceb",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 1610,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "4d149834151dd06b",
-        "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 17",
-        "func": "msg.oldpayload = msg.payload;\nmsg.url = `https://api.openai.com/v1/completions`;\nmsg.method = \"POST\";\nmsg.token = global.get('token')\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": msg.token,\n}\n\nmsg.prompt = msg.payload.prompt + \" Data: \" + msg.payload.data\n\nmsg.payload = {\n    \"model\": \"text-davinci-003\",\n    'temperature': 0.5,\n    \"prompt\": msg.prompt,\n    \"max_tokens\":1000,\n    \"top_p\": 1,\n    \"n\": 1\n}\n\nreturn msg;\n\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 330,
-        "y": 320,
-        "wires": [
-            [
-                "45e3a88b8bd2d1a8"
-            ]
-        ]
-    },
-    {
-        "id": "65ea352f05727c8b",
-        "type": "http in",
-        "z": "0982ff679a3f7ceb",
-        "name": "",
-        "url": "/completions",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 140,
-        "y": 320,
-        "wires": [
-            [
-                "4d149834151dd06b"
-            ]
-        ]
-    },
-    {
-        "id": "45e3a88b8bd2d1a8",
-        "type": "http request",
-        "z": "0982ff679a3f7ceb",
-        "name": "",
-        "method": "use",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 500,
-        "y": 320,
-        "wires": [
-            [
-                "fa9c0e8472b0b04e"
-            ]
-        ]
-    },
-    {
-        "id": "81868afb10ed64c5",
-        "type": "http response",
-        "z": "0982ff679a3f7ceb",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 850,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "dbb0bfc934a59ccb",
-        "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 19",
-        "func": "if(msg.statusCode === 200){\n    msg.payload = msg.payload.text\n    }\n    else{\n     msg.payload = msg.payload.error.message\n     msg.statusCode = 200\n    }\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 670,
-        "y": 220,
-        "wires": [
-            [
-                "2cc5fd124313ecfe"
-            ]
-        ]
-    },
-    {
-        "id": "5590ca4427f4bf5d",
-        "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 24",
-        "func": "msg.oldpayload = msg.payload;\nmsg.url = `https://api.openai.com/v1/audio/translations`;\nmsg.method = \"POST\";\nmsg.token = global.get('token')\nmsg.headers = {\n    \"Content-Type\": \"multipart/form-data\",\n    \"Authorization\": msg.token,\n    \"Connection\": \"Keep-Alive\",\n    \"Transfer-Encoding\": \"chunked\"\n}\n\nmsg.payload = {\n    // file: msg.req.files[0].buffer,\n    model: 'whisper-1',\n    // \"language\": \"uk\",\n    'temperature': 0.2,\n        \"file\": {\n        \"value\": msg.req.files[0].buffer,\n        \"options\": {\n            \"filename\": msg.req.files[0].originalname\n        }\n    },\n    \n}\n\nreturn msg;\n\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 330,
-        "y": 400,
-        "wires": [
-            [
-                "a5348fa03d3bb4ba"
-            ]
-        ]
-    },
-    {
-        "id": "080a5cd3febd8f4f",
-        "type": "http in",
-        "z": "0982ff679a3f7ceb",
-        "name": "",
-        "url": "/translateVideo",
+        "url": "/convertSpeech",
         "method": "post",
         "upload": true,
         "swaggerDoc": "",
-        "x": 130,
-        "y": 400,
+        "x": 120,
+        "y": 180,
         "wires": [
             [
-                "5590ca4427f4bf5d"
+                "ede1e6ca4e1a9683"
             ]
         ]
     },
     {
-        "id": "a5348fa03d3bb4ba",
+        "id": "7328494e428a55a5",
+        "type": "http response",
+        "z": "1bf0d6b2752b2635",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1570,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "a978efee1003b60e",
+        "type": "function",
+        "z": "1bf0d6b2752b2635",
+        "name": "Open AI Request",
+        "func": "\nmsg.url = `https://api.openai.com/v1/chat/completions`;\nmsg.method = \"POST\";\nmsg.token = global.get('key')\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": `Bearer ${msg.token}`\n}\n\nmsg.payload = {\n    \"model\": \"gpt-3.5-turbo-0613\",\n    \"messages\": [\n        {\n            role: \"system\",\n            content: \"act as a text analyst\",\n        },\n        {\n            role: \"user\", content: `\n            Act as a professional sales manager. Your job is to analyze cold calls. You work in a real estate industry.\n            In each of your report, add a list of bullets. The repost should be short but helpful, as result it should help improve the next calls.\n            Below I will provide a call transcription and focused request what should be analyzed. Based on that data give me a detailed report of the cold call.\n            Give me result in Arabic language.\n            Call transcription:  ${msg.payload.data}\n            Focused request: ${msg.payload.prompt}`\n        },\n    ]\n}\n\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 360,
+        "wires": [
+            [
+                "d7c2cfb355a1e19e",
+                "625358e6144cdc01"
+            ]
+        ]
+    },
+    {
+        "id": "e38d306dcd4b2c1e",
+        "type": "http in",
+        "z": "1bf0d6b2752b2635",
+        "name": "",
+        "url": "/conclusions",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 360,
+        "wires": [
+            [
+                "a978efee1003b60e",
+                "9b8e07afaba98ca7"
+            ]
+        ]
+    },
+    {
+        "id": "d7c2cfb355a1e19e",
         "type": "http request",
-        "z": "0982ff679a3f7ceb",
+        "z": "1bf0d6b2752b2635",
         "name": "",
         "method": "use",
         "ret": "obj",
@@ -338,316 +217,217 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 500,
-        "y": 400,
+        "x": 510,
+        "y": 360,
         "wires": [
             [
-                "e1f4fc91384d3a67"
+                "a09a19cff3df794d",
+                "af6f3f48ca681a1e"
             ]
         ]
     },
     {
-        "id": "d3d4232d60e3dc8d",
+        "id": "4238e1e968238af1",
         "type": "http response",
-        "z": "0982ff679a3f7ceb",
+        "z": "1bf0d6b2752b2635",
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 840,
-        "y": 400,
+        "x": 830,
+        "y": 360,
         "wires": []
     },
     {
-        "id": "e1f4fc91384d3a67",
+        "id": "1baf6c3cbd23b52e",
         "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 25",
-        "func": "if(msg.statusCode === 200){\n    msg.payload = msg.payload.text\n    }\n    else{\n        msg.payload = msg.payload\n        msg.statusCode = 200\n    }\nreturn msg;",
+        "z": "1bf0d6b2752b2635",
+        "name": "response",
+        "func": "if(msg.statusCode === 200){\n    msg.payload = {\n        text: msg.payload.text,\n        statusCode: msg.statusCode\n    }\n}\n    \nelse{\n  msg.payload = {\n         text : msg.payload.error.message,\n         statusCode : 401\n         }\n    msg.statusCode = 200\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 680,
-        "y": 400,
+        "y": 220,
         "wires": [
             [
-                "d3d4232d60e3dc8d"
+                "403fe5f7c054424d",
+                "672c31390cf8d2dd"
             ]
         ]
     },
     {
-        "id": "ccdf5fd4ed9e6ed3",
+        "id": "a66789c0abb53019",
         "type": "youtube-ytdl",
-        "z": "0982ff679a3f7ceb",
+        "z": "1bf0d6b2752b2635",
         "name": "",
         "url": "payload",
         "urlType": "msg",
         "path": "path",
         "pathType": "msg",
-        "x": 510,
-        "y": 120,
+        "x": 530,
+        "y": 140,
         "wires": [
             [
-                "7bcb301e0aa4eb8e"
+                "5834e2714ff34a91"
             ]
         ]
     },
     {
-        "id": "72c2138e3aa78429",
-        "type": "http request",
-        "z": "0982ff679a3f7ceb",
-        "name": "",
-        "method": "use",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 1610,
-        "y": 220,
-        "wires": [
-            [
-                "a943aada5185932a"
-            ]
-        ]
-    },
-    {
-        "id": "626fb43bcf5c1327",
+        "id": "403fe5f7c054424d",
         "type": "http response",
-        "z": "0982ff679a3f7ceb",
+        "z": "1bf0d6b2752b2635",
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1930,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "a943aada5185932a",
-        "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 26",
-        "func": "if(msg.statusCode === 200){\n    msg.payload ={ \n        translate: msg.payload.text,\n        transcript: msg.transcript}\n    }\n    else{\n        msg.payload = msg.payload\n        msg.statusCode = 200\n    }\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1770,
-        "y": 240,
-        "wires": [
-            [
-                "626fb43bcf5c1327"
-            ]
-        ]
-    },
-    {
-        "id": "daf1a636ad3a0004",
-        "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 27",
-        "func": "\nif(msg.old.translate === 'true'){\nmsg.transcript = msg.payload;\nmsg.url = `https://api.openai.com/v1/audio/translations`;\nmsg.method = \"POST\";\n\nmsg.headers = {\n    \"Content-Type\": \"multipart/form-data\",\n    \"Authorization\": msg.token,\n    \"Connection\": \"Keep-Alive\",\n    \"Transfer-Encoding\": \"chunked\"\n}\n\nmsg.payload = {\n    'model': 'whisper-1',\n    \"response-format\": \"text\",\n    'temperature': 0.2,\n        \"file\": {\n        \"value\": msg.buffer,\n        \"options\": {\n            \"filename\": msg.filename\n        }\n    }, \n}\nreturn [msg,null]\n}\nelse{\nreturn [null, msg]\n}\n\n\n",
-        "outputs": 2,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1450,
-        "y": 180,
-        "wires": [
-            [
-                "72c2138e3aa78429"
-            ],
-            [
-                "e3314196fa80a884"
-            ]
-        ]
-    },
-    {
-        "id": "9adcb51f7dcf845b",
-        "type": "http response",
-        "z": "0982ff679a3f7ceb",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 990,
+        "x": 840,
         "y": 220,
         "wires": []
     },
     {
-        "id": "3f965dfdd2b0d47b",
-        "type": "http request",
-        "z": "0982ff679a3f7ceb",
-        "name": "",
-        "method": "use",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 990,
-        "y": 280,
-        "wires": [
-            [
-                "388add7d8b3b0040"
-            ]
-        ]
-    },
-    {
-        "id": "69579e696768a6c1",
-        "type": "http response",
-        "z": "0982ff679a3f7ceb",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 1310,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "388add7d8b3b0040",
+        "id": "a09a19cff3df794d",
         "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 28",
-        "func": "if(msg.statusCode === 200){\n    msg.payload ={ \n        translate: msg.payload.text,\n        transcript: msg.transcript\n        }\n    }\n    else{\n    msg.payload = {\n        translate: msg.payload.error.message,\n        transcript: msg.transcript\n    }\n        msg.statusCode = 200\n    }\nreturn msg;",
+        "z": "1bf0d6b2752b2635",
+        "name": "response",
+        "func": "if(msg.statusCode === 200){\n    msg.payload = msg.payload.choices[0].message.content\n    }\n    else{\n    msg.payload = msg.payload.error.message\n    msg.statusCode = 200\n    }\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1150,
-        "y": 300,
+        "x": 680,
+        "y": 360,
         "wires": [
             [
-                "69579e696768a6c1"
+                "4238e1e968238af1",
+                "af6f3f48ca681a1e"
             ]
         ]
     },
     {
-        "id": "2cc5fd124313ecfe",
+        "id": "470e85dae371e0df",
         "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 29",
-        "func": "\nif (msg.oldpayload.translate === 'true'){\nmsg.transcript = msg.payload;\nmsg.url = `https://api.openai.com/v1/audio/translations`;\nmsg.method = \"POST\";\n\nmsg.headers = {\n    \"Content-Type\": \"multipart/form-data\",\n    \"Authorization\": msg.token,\n    \"Connection\": \"Keep-Alive\",\n    \"Transfer-Encoding\": \"chunked\"\n}\n\nmsg.payload = {\n    'model': 'whisper-1',\n    \"response-format\": \"text\",\n    'temperature': 0.2,\n        \"file\": {\n        \"value\": msg.buffer,\n        \"options\": {\n            \"filename\": msg.filename\n        }\n    }, \n}\nreturn [msg,null]\n}\nelse{\n    msg.payload.transcript = msg.payload\nreturn [null, msg]\n}\n\n\n",
-        "outputs": 2,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 830,
-        "y": 240,
-        "wires": [
-            [
-                "3f965dfdd2b0d47b"
-            ],
-            [
-                "9adcb51f7dcf845b"
-            ]
-        ]
-    },
-    {
-        "id": "fa9c0e8472b0b04e",
-        "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 30",
-        "func": "if(msg.statusCode === 200){\n    msg.payload = msg.payload.choices[0].text\n    }\n    else{\n    msg.payload = msg.payload.error.message\n        msg.statusCode = 200\n    }\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 690,
-        "y": 320,
-        "wires": [
-            [
-                "81868afb10ed64c5"
-            ]
-        ]
-    },
-    {
-        "id": "62b17cec65e9d571",
-        "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 31",
-        "func": "if(msg.statusCode === 200){\n    msg.payload = msg.payload.text\n    }\n    else{\n     msg.payload = msg.payload.error.message\n     msg.statusCode = 200\n    }\nreturn msg;",
+        "z": "1bf0d6b2752b2635",
+        "name": "response",
+        "func": "if(msg.statusCode === 200){\n    msg.payload = {\n        text: msg.payload.text,\n        statusCode: msg.statusCode\n    }\n}\n    else{\n    msg.payload = {\n        text: msg.payload.error.message,\n        statusCode: 401\n    }\n    msg.statusCode = 200\n}\n    \nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 1410,
-        "y": 120,
+        "y": 140,
         "wires": [
             [
-                "daf1a636ad3a0004"
+                "7328494e428a55a5",
+                "4bd1833a95928eb4"
             ]
         ]
     },
     {
-        "id": "6ed4068a0010753f",
+        "id": "16cccf52e50515a2",
         "type": "template",
-        "z": "0982ff679a3f7ceb",
+        "z": "1bf0d6b2752b2635",
         "name": "",
         "field": "payload",
         "fieldType": "msg",
         "format": "css",
         "syntax": "mustache",
-        "template": ".gridWrap{\n    right: 0px !important;\n    top: 0px !important;\n    height: 100vh !important;\n    width: 100vw;\n    padding: 4px 0px !important;\n}\n\n.selectedTab {\nbox-shadow: rgb(235, 239, 242) -1px 0px 0px inset, rgb(235, 239, 242) 1px 0px 0px inset, #0a5dc2 0px 4px 0px inset !important;\n\n}",
+        "template": ".gridWrap{\n    right: 0px !important;\n    top: 0px !important;\n    min-height: 100vh !important;\n    height: fit-content !important;\n    width: 100vw;\n    padding: 4px 0px !important;\n    \n}\n.gridWrap>div>div>div>div>div>div>div>div>div>div>div>div>div{\n    display: flex !important;\n    justify-content: space-around !important;\n    flex-direction: column !important;\n    align-items: center !important;\n    gap: 15px !important;\n}\n.gridWrap>div>div>div>div>div>div>div>div>div>div{\n    height: inherit !important;\n}\n\n.bp3-input, .select-button {\n    height: 55px !important;\n    border-radius: 5px !important;\n    border: 2px solid #F39100 !important;\n}\n.gridWrap .input input.bp3-input:focus:focus {\n    border: 2px solid #F39100 !important;\n    box-shadow: rgb(254 223 192) 0px 0px 0px 2px !important;\n}\n.iframe{\n    height: 55px !important;\n    padding: 0 !important;\n    padding-right: 4px !important;  \n}\n.iframe iframe{\n    border-radius: 5px !important;\n}\n.text>div>div>div>div>div{\n   border-radius: 5px !important; \n}\n.secondary_container, .bgimage{\n    /* left: 50% !important;\n    transform: translateX(-50%) !important; */\n    margin: 0 auto !important;\n    position: static !important;\n}\n.label{\n    top: 346px !important;\n    height: 37px !important;\n    padding: 0 !important;\n    padding-left: 4px !important;\n}\n.run_btn{\n    padding: 0 !important;\n    height: 55px !important;\n}\nlabel.uploadBtn:hover{\n    background: rgb(158, 200, 250) !important;\n}\n.bp3-input-action{\n    position: absolute !important;\n    top: 50% !important;\n    transform: translateY(-50%) !important;\n}\n.text>div>div>div>div>div>div>div{\n    padding: 4px !important;\n}",
         "output": "str",
-        "x": 320,
-        "y": 460,
+        "x": 300,
+        "y": 60,
         "wires": [
             [
-                "29268da6a7d287fe"
+                "f97147e49c8cba44"
             ]
         ]
     },
     {
-        "id": "e9a3f76c0ab11819",
+        "id": "9a07560ef518aa95",
         "type": "http in",
-        "z": "0982ff679a3f7ceb",
+        "z": "1bf0d6b2752b2635",
         "name": "",
-        "url": "/css",
+        "url": "/style",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 100,
-        "y": 460,
+        "x": 80,
+        "y": 60,
         "wires": [
             [
-                "6ed4068a0010753f"
+                "16cccf52e50515a2"
             ]
         ]
     },
     {
-        "id": "29268da6a7d287fe",
+        "id": "f97147e49c8cba44",
         "type": "http response",
-        "z": "0982ff679a3f7ceb",
+        "z": "1bf0d6b2752b2635",
         "name": "",
         "statusCode": "",
         "headers": {
             "content-type": "text/css"
         },
-        "x": 550,
-        "y": 460,
+        "x": 490,
+        "y": 60,
         "wires": []
     },
     {
-        "id": "814c86a1f676ae09",
+        "id": "672c31390cf8d2dd",
+        "type": "debug",
+        "z": "1bf0d6b2752b2635",
+        "name": "debug 13",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "4bd1833a95928eb4",
+        "type": "debug",
+        "z": "1bf0d6b2752b2635",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1570,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "af6f3f48ca681a1e",
+        "type": "debug",
+        "z": "1bf0d6b2752b2635",
+        "name": "debug 15",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "f20880961662ca64",
         "type": "inject",
-        "z": "0982ff679a3f7ceb",
-        "name": "",
+        "z": "1bf0d6b2752b2635",
+        "name": "make folder",
         "props": [
             {
                 "p": "payload"
@@ -659,34 +439,87 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
+        "once": true,
+        "onceDelay": "30",
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 140,
-        "y": 80,
+        "x": 110,
+        "y": 480,
         "wires": [
             [
-                "b6521e8507880da4"
+                "6b7df739cb6f9b1c"
             ]
         ]
     },
     {
-        "id": "b6521e8507880da4",
+        "id": "6b7df739cb6f9b1c",
         "type": "function",
-        "z": "0982ff679a3f7ceb",
-        "name": "function 32",
-        "func": "global.set('token', \"\")\nreturn msg;",
+        "z": "1bf0d6b2752b2635",
+        "name": "folder content",
+        "func": "msg.payload = 'welcome';\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
-        "y": 80,
+        "x": 320,
+        "y": 480,
+        "wires": [
+            [
+                "1765b817c7e30233"
+            ]
+        ]
+    },
+    {
+        "id": "1765b817c7e30233",
+        "type": "file",
+        "z": "1bf0d6b2752b2635",
+        "name": "",
+        "filename": "/video/welcome.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 530,
+        "y": 480,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "9b8e07afaba98ca7",
+        "type": "debug",
+        "z": "1bf0d6b2752b2635",
+        "name": "debug 16",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 240,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "625358e6144cdc01",
+        "type": "debug",
+        "z": "1bf0d6b2752b2635",
+        "name": "debug 17",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 300,
+        "wires": []
     }
 ]
